@@ -17,6 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kim.bifrost.rain.persecution.ui.Screen
+import kim.bifrost.rain.persecution.ui.classification.ClassificationScreen
 import kim.bifrost.rain.persecution.ui.square.SquareScreen
 import kim.bifrost.rain.persecution.ui.theme.PersecutionTheme
 
@@ -66,6 +67,12 @@ fun Main() {
         when (screen) {
             Screen.Square -> {
                 SquareScreen()
+            }
+            Screen.Classification -> {
+                ClassificationScreen()
+            }
+            else -> {
+
             }
         }
     }

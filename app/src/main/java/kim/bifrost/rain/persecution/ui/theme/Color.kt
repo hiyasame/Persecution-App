@@ -10,3 +10,5 @@ val Teal200 = Color(0xFF03DAC5)
 val primary = Color(0xFF026bee)
 val primaryLight = Color(0xFF6698ff)
 val primaryDark = Color(0xFF0042bb)
+
+val gray = Color(0xFFEEECF1)

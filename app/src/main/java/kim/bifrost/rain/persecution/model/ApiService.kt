@@ -53,10 +53,10 @@ interface ApiService {
     ) : Flow<BaseResponse<String>>
 
     @GET("/classification/list")
-    fun getAllClassification(
+    suspend fun getAllClassification(
         @Query("limit") limit: Int = 20,
         @Query("offset") offset: Int = 0
-    ) : Flow<BaseResponse<List<ClassificationData>>>
+    ) : BaseResponse<List<ClassificationData>>
 
     @GET("/classification/query")
     fun searchClassification(
