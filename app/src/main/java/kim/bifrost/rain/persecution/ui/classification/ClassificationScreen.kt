@@ -2,15 +2,12 @@ package kim.bifrost.rain.persecution.ui.classification
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,19 +15,19 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.rememberImagePainter
 import coil.size.Scale
 import kim.bifrost.rain.persecution.R
-import kim.bifrost.rain.persecution.logic.ClassificationViewModel
 import kim.bifrost.rain.persecution.model.bean.ClassificationData
+import kim.bifrost.rain.persecution.ui.Screen
 import kim.bifrost.rain.persecution.ui.theme.gray
 import kim.bifrost.rain.persecution.ui.theme.titleTextStyle
-import kim.bifrost.rain.persecution.ui.widgets.ImageCard
 import kim.bifrost.rain.persecution.ui.widgets.SwipePagingList
 import kim.bifrost.rain.persecution.utils.getOrNull
 
@@ -43,7 +40,7 @@ import kim.bifrost.rain.persecution.utils.getOrNull
  **/
 @Preview
 @Composable
-fun ClassificationScreen() {
+fun ClassificationScreen(navController: NavController = rememberNavController()) {
     val viewModel = viewModel<ClassificationViewModel>()
     val items = viewModel.pagingData.collectAsLazyPagingItems()
     SwipePagingList(
@@ -60,22 +57,27 @@ fun ClassificationScreen() {
                 Row(
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    val item = items.getOrNull(s * 2)
-                    val item2 = items.getOrNull(s * 2 + 1)
-                    item?.let {
-                        ClassificationItem(
-                            modifier = Modifier.weight(1f),
-                            data = item
-                        )
-                    }
-                    item2?.let {
-                        ClassificationItem(
-                            modifier = Modifier.weight(1f),
-                            data = item2
-                        )
-                    }
-                    if (item != null && item2 == null) {
-                        Spacer(modifier = Modifier.weight(1.0f))
+                    Row {
+                        val item = items.getOrNull(s * 2)
+                        val item2 = items.getOrNull(s * 2 + 1)
+                        item?.let {
+                            ClassificationItem(
+                                modifier = Modifier.weight(1f),
+                                data = item,
+                                onClick = {
+                                    navController.navigate(Screen.Classification.generateRoute("id" to item.id))
+                                }
+                            )
+                        }
+                        item2?.let {
+                            ClassificationItem(
+                                modifier = Modifier.weight(1f),
+                                data = item2,
+                                onClick = {
+                                    navController.navigate(Screen.Classification.generateRoute("id" to item2.id))
+                                }
+                            )
+                        }
                     }
                 }
             }
@@ -95,7 +97,7 @@ fun ClassificationItem(
     onClick: () -> Unit = {}
 ) {
     Box(
-        Modifier.pointerInput(Unit) {
+        modifier.pointerInput(Unit) {
             detectTapGestures(
                 onTap = {
                     onClick()
@@ -104,7 +106,7 @@ fun ClassificationItem(
         }
     ) {
         Card(
-            modifier = modifier
+            modifier = Modifier
                 .padding(10.dp)
                 .width(140.dp)
                 .height(75.dp)

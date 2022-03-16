@@ -1,4 +1,4 @@
-package kim.bifrost.rain.persecution
+package kim.bifrost.rain.persecution.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -16,20 +16,27 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import kim.bifrost.rain.persecution.ui.Screen
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import kim.bifrost.rain.persecution.ComposeNavigation
+import kim.bifrost.rain.persecution.R
 import kim.bifrost.rain.persecution.ui.classification.ClassificationScreen
+import kim.bifrost.rain.persecution.ui.search.SearchScreen
 import kim.bifrost.rain.persecution.ui.square.SquareScreen
 import kim.bifrost.rain.persecution.ui.theme.PersecutionTheme
+import kim.bifrost.rain.persecution.utils.transparentStatusBar
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        transparentStatusBar()
         setContent {
             PersecutionTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background) {
-                    Main()
+                    ComposeNavigation()
                 }
             }
         }
@@ -37,10 +44,10 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Main() {
+fun Main(navController: NavController) {
     // 当前界面
-    var screen: Screen by remember { mutableStateOf(Screen.Square) }
-    val bottomItems = arrayOf("广场" to Screen.Square, "分类" to Screen.Classification, "搜索" to Screen.Query)
+    var screen: MainScreen by remember { mutableStateOf(MainScreen.Square) }
+    val bottomItems = arrayOf("广场" to MainScreen.Square, "分类" to MainScreen.Classification, "搜索" to MainScreen.Query)
     Scaffold(
         bottomBar = {
             BottomNavigation(
@@ -56,6 +63,11 @@ fun Main() {
                                 0 -> Icon(Icons.Filled.Home, contentDescription = null)
                                 1 -> Icon(painterResource(id = R.drawable.ic_classification), modifier = Modifier.size(20.dp), contentDescription = null)
                                 2 -> Icon(Icons.Filled.Search, contentDescription = null)
+//                                3 -> Icon(
+//                                    painterResource(id = R.drawable.ic_upload),
+//                                    modifier = Modifier.size(20.dp),
+//                                    contentDescription = null
+//                                )
                             }
                         },
                         label = { Text(text = name) }
@@ -65,14 +77,14 @@ fun Main() {
         }
     ) {
         when (screen) {
-            Screen.Square -> {
-                SquareScreen()
+            MainScreen.Square -> {
+                SquareScreen(navController)
             }
-            Screen.Classification -> {
-                ClassificationScreen()
+            MainScreen.Classification -> {
+                ClassificationScreen(navController)
             }
             else -> {
-
+                SearchScreen(navController)
             }
         }
     }
@@ -82,6 +94,6 @@ fun Main() {
 @Composable
 fun DefaultPreview() {
     PersecutionTheme {
-        Main()
+        Main(rememberNavController())
     }
 }

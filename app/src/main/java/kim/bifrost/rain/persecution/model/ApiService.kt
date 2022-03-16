@@ -19,17 +19,17 @@ import retrofit2.http.*
 interface ApiService {
 
     @GET("/classification")
-    fun getClassification(
-        @Query("id") id: Int,
-        @Query("name") name: String
-    ): Flow<BaseResponse<ClassificationData>>
+    suspend fun getClassification(
+        @Query("id") id: Int? = null,
+        @Query("name") name: String? = null
+    ): BaseResponse<ClassificationData>
 
     @FormUrlEncoded
     @POST("/classification/upload")
-    fun uploadToClassification(
+    suspend fun uploadToClassification(
         @Field("cid") cid: Int,
         @Field("image") image: String
-    ): Flow<BaseResponse<String>>
+    ): BaseResponse<String>
 
     @GET("/classification/images")
     suspend fun getImages(
@@ -59,17 +59,22 @@ interface ApiService {
     ) : BaseResponse<List<ClassificationData>>
 
     @GET("/classification/query")
-    fun searchClassification(
+    suspend fun searchClassification(
         @Query("query") query: String,
         @Query("limit") limit: Int = 20,
         @Query("offset") offset: Int = 0
-    ) : Flow<BaseResponse<Pager<ClassificationData>>>
+    ) : BaseResponse<Pager<ClassificationData>>
+
+    @GET("/image")
+    suspend fun getImage(
+        @Query("id") id: Int
+    ) : BaseResponse<SingleImageData>
 
     @Multipart
     @POST("/upload")
-    fun upload(
-        @Part("image") image: MultipartBody.Part
-    ): Flow<BaseResponse<String>>
+    suspend fun upload(
+        @Part image: MultipartBody.Part
+    ): BaseResponse<String>
 
     companion object : ApiService by RetrofitHelper.service
 }

@@ -1,4 +1,4 @@
-package kim.bifrost.rain.persecution.logic
+package kim.bifrost.rain.persecution.ui.square
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 
 /**
- * kim.bifrost.rain.persecution.logic.SquareViewModel
+ * kim.bifrost.rain.persecution.ui.square.SquareViewModel
  * Persecution
  *
  * @author 寒雨
@@ -31,7 +31,7 @@ class SquareViewModel : ViewModel() {
         ),
         pagingSourceFactory = {
             BasePagingSource {
-                ApiService.getImages(offset = it * 20).data.data
+                ApiService.getImages(offset = it * 20).data.data.map { d -> d to ApiService.getClassification(d.cid).data }
             }
         }
     ).flow.cachedIn(viewModelScope)

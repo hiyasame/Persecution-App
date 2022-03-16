@@ -1,5 +1,6 @@
-package kim.bifrost.rain.persecution.logic
+package kim.bifrost.rain.persecution.ui.search
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
@@ -9,15 +10,14 @@ import kim.bifrost.rain.persecution.model.ApiService
 import kim.bifrost.rain.persecution.model.BasePagingSource
 
 /**
- * kim.bifrost.rain.persecution.logic.ClassificationViewModel
+ * kim.bifrost.rain.persecution.ui.search.SearchViewModel
  * Persecution
  *
  * @author 寒雨
- * @since 2022/3/11 21:52
+ * @since 2022/3/16 22:11
  **/
-class ClassificationViewModel : ViewModel() {
-
-    val pagingData = Pager(
+class SearchViewModel : ViewModel() {
+    fun query(q: String) = Pager(
         config = PagingConfig(
             pageSize = 20,
             enablePlaceholders = false,
@@ -25,9 +25,8 @@ class ClassificationViewModel : ViewModel() {
         ),
         pagingSourceFactory = {
             BasePagingSource {
-                ApiService.getAllClassification(offset = it * 20).data
+                ApiService.searchClassification(query = q, offset = it * 20).data.data.also { Log.d("Test", "(SearchViewModel.kt:27) ==> 1") }
             }
         }
     ).flow.cachedIn(viewModelScope)
-
 }
