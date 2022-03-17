@@ -40,11 +40,11 @@ interface ApiService {
 
     @FormUrlEncoded
     @POST("/classification/create")
-    fun createClassification(
+    suspend fun createClassification(
         @Field("name") name: String,
         @Field("avatar") avatar: String,
         @Field("description") description: String
-    ) : Flow<BaseResponse<String>>
+    ) : BaseResponse<String>
 
     @FormUrlEncoded
     @POST("/classification/remove")
