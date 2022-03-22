@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kim.bifrost.rain.persecution.ComposeNavigation
 import kim.bifrost.rain.persecution.R
 import kim.bifrost.rain.persecution.ui.classification.ClassificationScreen
@@ -30,12 +31,19 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        transparentStatusBar()
         setContent {
             PersecutionTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background) {
+                    val systemUiController = rememberSystemUiController()
+
+                    SideEffect {
+                        systemUiController.setSystemBarsColor(
+                            color = Color.Transparent,
+                            darkIcons = true
+                        )
+                    }
                     ComposeNavigation()
                 }
             }
@@ -44,9 +52,11 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Main(navController: NavController) {
-    // 当前界面
-    var screen: MainScreen by remember { mutableStateOf(MainScreen.Square) }
+fun MainScreenScaffold(
+    navController: NavController,
+    screen: MainScreen,
+    content: @Composable (NavController) -> Unit
+) {
     val bottomItems = arrayOf("广场" to MainScreen.Square, "分类" to MainScreen.Classification, "搜索" to MainScreen.Query)
     Scaffold(
         bottomBar = {
@@ -57,17 +67,12 @@ fun Main(navController: NavController) {
                 bottomItems.forEachIndexed { index, (name, sc) ->
                     BottomNavigationItem(
                         selected = screen == sc,
-                        onClick = { screen = sc },
+                        onClick = { navController.navigate(sc.route) },
                         icon = {
                             when(index){
                                 0 -> Icon(Icons.Filled.Home, contentDescription = null)
                                 1 -> Icon(painterResource(id = R.drawable.ic_classification), modifier = Modifier.size(20.dp), contentDescription = null)
                                 2 -> Icon(Icons.Filled.Search, contentDescription = null)
-//                                3 -> Icon(
-//                                    painterResource(id = R.drawable.ic_upload),
-//                                    modifier = Modifier.size(20.dp),
-//                                    contentDescription = null
-//                                )
                             }
                         },
                         label = { Text(text = name) }
@@ -76,24 +81,6 @@ fun Main(navController: NavController) {
             }
         }
     ) {
-        when (screen) {
-            MainScreen.Square -> {
-                SquareScreen(navController)
-            }
-            MainScreen.Classification -> {
-                ClassificationScreen(navController)
-            }
-            else -> {
-                SearchScreen(navController)
-            }
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    PersecutionTheme {
-        Main(rememberNavController())
+        content(navController)
     }
 }

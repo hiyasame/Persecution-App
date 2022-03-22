@@ -39,6 +39,12 @@ interface ApiService {
     ) : BaseResponse<Pager<SingleImageData>>
 
     @FormUrlEncoded
+    @POST("/image/remove")
+    suspend fun removeImage(
+        @Field("id") id: Int
+    ) : BaseResponse<String>
+
+    @FormUrlEncoded
     @POST("/classification/create")
     suspend fun createClassification(
         @Field("name") name: String,

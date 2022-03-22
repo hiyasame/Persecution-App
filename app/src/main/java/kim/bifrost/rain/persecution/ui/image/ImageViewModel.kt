@@ -35,6 +35,8 @@ class ImageViewModel : ViewModel() {
         .addInterceptor(HttpLoggingInterceptor())
         .build()
 
+    suspend fun removeImage(id: Int) = ApiService.removeImage(id)
+
     fun getImageData(id: Int) = flow {
         emit(ApiService.getImage(id))
     }.flowOn(Dispatchers.IO)

@@ -3,6 +3,8 @@ package kim.bifrost.rain.persecution.ui.search
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -12,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -56,21 +59,15 @@ fun SearchScreen(navController: NavController = rememberNavController()) {
             TopAppBar(
                 backgroundColor = Color.White,
                 contentColor = Color.Gray,
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = null)
-                    }
-                },
-                actions = { },
+                actions = {  },
                 title = {
+                    val focusManager = LocalFocusManager.current
                     Row(
                         modifier = Modifier.fillMaxSize(),
-                        horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         OutlinedTextField(
                             modifier = Modifier
-                                .padding(end = 10.dp)
                                 .fillMaxHeight()
                                 .fillMaxWidth(0.8f),
                             value = query,
@@ -80,11 +77,15 @@ fun SearchScreen(navController: NavController = rememberNavController()) {
                             textStyle = TextStyle(
                                 fontSize = 16.sp,
                                 color = Color.Gray
+                            ),
+                            leadingIcon = {
+                                Icon(Icons.Filled.Search, contentDescription = null)
+                            },
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+                                unfocusedBorderColor = Color.Transparent,
+                                focusedBorderColor = Color.Transparent
                             )
                         )
-                        IconButton(onClick = {  }) {
-                            Icon(Icons.Filled.Search, contentDescription = null)
-                        }
                     }
                 }
             )

@@ -7,10 +7,10 @@ package kim.bifrost.rain.persecution.ui
  * @author 寒雨
  * @since 2022/3/9 19:14
  **/
-sealed class MainScreen {
-    object Square : MainScreen()
-    object Classification : MainScreen()
-    object Query : MainScreen()
+sealed class MainScreen(val route: String) {
+    object Square : MainScreen("main/square")
+    object Classification : MainScreen("main/classification")
+    object Query : MainScreen("main/query")
 }
 
 sealed class Screen(val route: String) {
@@ -21,8 +21,9 @@ sealed class Screen(val route: String) {
         }
         return str
     }
-
-    object Main : Screen("main")
+    object Square : Screen("main/square")
+    object ClassificationList : Screen("main/classification")
+    object Query : Screen("main/query")
     object Image : Screen("image/{id}")
     object Classification : Screen("classification/{id}")
 }

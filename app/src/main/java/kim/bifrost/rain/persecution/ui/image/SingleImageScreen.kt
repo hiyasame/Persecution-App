@@ -7,6 +7,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,7 +18,9 @@ import coil.compose.rememberImagePainter
 import coil.size.Scale
 import kim.bifrost.rain.persecution.R
 import kim.bifrost.rain.persecution.model.bean.SingleImageData
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 
 /**
  * kim.bifrost.rain.persecution.ui.image.SingleImageScreen
@@ -44,7 +47,17 @@ fun SingleImageScreen(navController: NavController = rememberNavController(), id
                         Icon(Icons.Filled.ArrowBack, contentDescription = null)
                     }
                 },
-                actions = {  },
+                actions = {
+                    IconButton(onClick = {
+                        coroutineScope.launch {
+                            viewModel.removeImage(id)
+                            scaffoldState.snackbarHostState.showSnackbar("删除成功")
+                            navController.popBackStack()
+                        }
+                    }) {
+                        Icon(Icons.Filled.Delete, contentDescription = null)
+                    }
+                },
                 title = {  }
             )
         },

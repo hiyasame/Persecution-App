@@ -250,8 +250,7 @@ fun ClassificationItem(
                 .padding(10.dp)
                 .width(140.dp)
                 .height(75.dp)
-                .align(Alignment.BottomCenter)
-                .background(gray),
+                .align(Alignment.BottomCenter),
             shape = RoundedCornerShape(10.dp)
         ) {
             Column(Modifier.align(Alignment.Center)) {
